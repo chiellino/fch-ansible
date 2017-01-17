@@ -1,0 +1,11 @@
+---
+- hosts: all
+  remote_user: root
+  tasks:
+  - name: ensure rpmbuild is at the latest version
+    yum:
+      name: rpm-build
+      name: gcc
+      name: kernel-devel
+      name: glibc-devel
+      state: latest

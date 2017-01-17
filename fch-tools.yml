@@ -1,0 +1,17 @@
+---
+- hosts: gfs2cluster
+  remote_user: root
+  tasks:
+  - name: ensure fch-tools are present
+    yum: name={{item}} state=installed
+    with_items:
+        - curl
+        - nmap
+        - net-tools
+        - nfs-utils
+        - git
+
+  - name: ensure ntp is running
+    service:
+      name: ntpd
+      state: started

@@ -1,0 +1,35 @@
+---
+- hosts: fch01
+  remote_user: root
+  tasks:
+   - name: copy file to remote
+     copy:
+       src: /etc/ansible/playbooks/ctrl-mnt.sh
+       dest: /tmp/ctrl-mnt.sh
+       owner: root
+       group: root
+       mode: 0744
+
+   - name: fix nfs mount of nas
+     replace: 
+       dest=/etc/fstab
+       regexp='^(\Anfsserver\Z)(.*$)'
+       replace='nas\2'
+       backup=yes
+     notify: umount nfs mount
+   - name: fix nfs mount of nfsserver
+     lineinfile: 
+       dest=/etc/fstab
+       regexp='^(\Anfsserver\Z)(.*$)'
+       replace='nfsserver\2'
+       backup=yes
+     notify: umount nfs mount
+  handlers:
+   - name: umount nfs mount
+     command: "/tmp/ctrl-mnt.sh off"
+     register: umount
+     notify: mount nfs mount
+
+   - name: mount nfs mount
+     command: "/tmp/ctrl-mnt.sh on"
+     when: umount.changed

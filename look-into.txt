@@ -1,0 +1,4 @@
+file
+lineinfile
+copy
+wait_for
