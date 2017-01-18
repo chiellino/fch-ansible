@@ -10,6 +10,7 @@
         - net-tools
         - nfs-utils
         - git
+        - perl
 
   - name: ensure ntp is running
     service:
